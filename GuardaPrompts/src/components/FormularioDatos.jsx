@@ -1,16 +1,15 @@
 import { useState } from 'react';
 
-function FormularioDatos({ caja, setcaja, siguiente }) {
+function FormularioDatos({ caja, setcaja}) {
     const [Datos, setDatos] = useState({
         datostemporales: [],
     });
 
-    const [nuevoDato, setNuevoDato] = useState("");
-
+    const [nuevoDato, setNuevoDato] = useState('');
 
     const agregarDato = () => {
-        if (nuevoDato.trim() === "") {
-            alert("Debes ingresar un dato");
+        if (nuevoDato.trim() === '') {
+            alert('Debes ingresar un dato');
             return;
         }
 
@@ -18,17 +17,16 @@ function FormularioDatos({ caja, setcaja, siguiente }) {
             ...Datos,
             datostemporales: [
                 ...Datos.datostemporales,
-                nuevoDato.trim()
-            ]
+                nuevoDato.trim(),
+            ],
         });
 
         setNuevoDato('');
-
     };
 
     const guardarDatos = () => {
         if (Datos.datostemporales.length === 0) {
-            alert("Debes agregar al menos un dato para crear una nueva caja");
+            alert('Debes agregar al menos un dato para crear una nueva caja');
             return;
         }
 
@@ -36,16 +34,14 @@ function FormularioDatos({ caja, setcaja, siguiente }) {
             ...caja,
             datos: [
                 ...caja.datos,
-                Datos
-            ]
-        })
+                Datos,
+            ],
+        });
 
         setDatos({
             datostemporales: [],
-        })
-    }
-
-
+        });
+    };
 
     return (
         <>
@@ -59,70 +55,70 @@ function FormularioDatos({ caja, setcaja, siguiente }) {
                         <form>
                             <div className="input">
                                 <label>Dato</label>
-                                <input type="text" placeholder="Ingrese el dato a registrar"
+
+                                <input
+                                    type="text"
+                                    placeholder="Ingrese el dato a registrar"
                                     value={nuevoDato}
                                     onChange={(e) => setNuevoDato(e.target.value)}
                                 />
+
                                 <button type="button" onClick={agregarDato}>
                                     Guardar dato
                                 </button>
                             </div>
+
                             <div className="lista">
-                                {
-                                    Datos.datostemporales.map(
-                                        (dato, indice) => (
-                                            <div className='curso'
-                                                key={indice}>
-                                                <span>
-                                                    {dato}
-                                                </span>
-                                                <button type='button'>
-                                                    Eliminar
-                                                </button>
-                                            </div>
-                                        )
+                                {[...Datos.datostemporales]
+                                    .sort((a, b) =>
+                                        a.localeCompare(b, 'es', {
+                                            numeric: true,
+                                            sensitivity: 'base',
+                                        })
                                     )
-                                }
+                                    .map((dato, indice) => (
+                                        <div className="curso" key={indice}>
+                                            <span>{dato}</span>
+                                            <button type="button">Eliminar</button>
+                                        </div>
+                                    ))}
                             </div>
-                            <div className='NuevaCaja'>
-                                <button
-                                    type='button'
-                                    onClick={guardarDatos}
-                                >
+
+                            <div className="NuevaCaja">
+                                <button type="button" onClick={guardarDatos}>
                                     Nueva caja
                                 </button>
                             </div>
-                            <div className='ListaCajas'>
+
+                            <div className="ListaCajas">
                                 <h3>Cajas de datos</h3>
+
                                 {caja.datos?.length > 0 ? (
-                                    caja.datos.map(
-                                        (dato, indice) => (
+                                    caja.datos.map((dato, indice) => (
+                                        <div
+                                            key={indice}
+                                            className="experiencia"
+                                        >
+                                            <p>Datos:</p>
 
-                                            <div
-                                                key={indice} className="experiencia">
-
-                                                    <p>Datos: </p>
-
-                                                    <ul>
-                                                        {[...dato.datostemporales]
-                                                            .sort((a, b) => a.localeCompare(b, 'es', {
-                                                                numeric: true,
-                                                                sensitivity: 'base'
-                                                            }))
-                                                            .map((datoAgregado, i) => (
-                                                            <li key={i}>
-                                                                {datoAgregado}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                            </div>
-                                        )
-                                    )
+                                            <ul>
+                                                {[...dato.datostemporales]
+                                                    .sort((a, b) =>
+                                                        a.localeCompare(b, 'es', {
+                                                            numeric: true,
+                                                            sensitivity: 'base',
+                                                        })
+                                                    )
+                                                    .map((datoAgregado, i) => (
+                                                        <li key={i}>
+                                                            {datoAgregado}
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        </div>
+                                    ))
                                 ) : (
-
-                                    <p>
-                                        No hay cajas con datos guardados
-                                    </p>
+                                    <p>No hay cajas con datos guardados</p>
                                 )}
                             </div>
                         </form>
@@ -130,6 +126,7 @@ function FormularioDatos({ caja, setcaja, siguiente }) {
                 </div>
             </section>
         </>
-    )
-};
+    );
+}
+
 export default FormularioDatos;
